@@ -28,7 +28,7 @@ $ python3 --version
 Python 3.8.17
 ```
 
-### 3. Create a "virtual env" to host the app:
+### 3. Create a "virtual env" to host the app
 
  
 If you're with `venv` -- this is my case for simplicity:
@@ -50,13 +50,15 @@ $ conda activate python-example
 > Note: to deactivate the `conda` env, simply run this: `conda deactivate`.
 
 
-### 4. Init the app:
+### 4. Install the required package
+
+We have only one package needed, which is `Flask`:
 
 ```sh
 (app) $ python -m pip install Flask
 ```
 
-### 5. Run it:
+### 5. Run it
 
 Run it to listen on port `8080`:
 
