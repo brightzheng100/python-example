@@ -66,10 +66,17 @@ Run it to listen on port `8080`:
 (app) $ python -m flask --app board run --port 8080
 ```
 
-Or listen to all IPs:
+Or, listen to all IPs:
 
 ```sh
 (app) $ python -m flask --app board run --host=0.0.0.0 --port 8080
+```
+
+Or, furthermore, if you want to run it with `uWSGI`, which is a fast, compiled server suite with extensive configuration and capabilities beyond a basic server, do this -- refer to the `uWSGI` doc [here](https://uwsgi-docs.readthedocs.io/en/latest/):
+
+```sh
+(app) $ pip install pyuwsgi
+(app) $ uwsgi --http 127.0.0.1:8080 --master -p 4 -w wsgi:app
 ```
 
 Now you can access it in browser through: http://localhost:8080/
