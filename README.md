@@ -66,19 +66,49 @@ Run it to listen on port `8080`:
 (app) $ python -m flask --app board run --port 8080
 ```
 
-Or, listen to all IPs:
+
+Or, listen on port `8080` but with all IPs:
 
 ```sh
 (app) $ python -m flask --app board run --host=0.0.0.0 --port 8080
 ```
 
+
 Or, furthermore, if you want to run it with `uWSGI`, which is a fast, compiled server suite with extensive configuration and capabilities beyond a basic server, do this -- refer to the `uWSGI` doc [here](https://uwsgi-docs.readthedocs.io/en/latest/):
 
 ```sh
 (app) $ pip install pyuwsgi
-(app) $ uwsgi --http 127.0.0.1:8080 --master -p 4 -w wsgi:app
+(app) $ uwsgi --http 0.0.0.0:8080 --master -p 4 -w wsgi:app
 ```
 
-Now you can access it in browser through: http://localhost:8080/
+
+Or, you may want to run it at backend quietly:
+
+```sh
+$ nohup bash -c "python -m flask --app board run --host=0.0.0.0 --port 8080" &> app.out & echo $! > app.pid
+```
+
+Then you can:
+- Tail the app's logs by: `tail -f app.out`.
+- Kill it by: `kill $(cat app.pid)`.
+
+Anyway, now you can access it in browser through: http://localhost:8080/
 
 > Note: `CTRL + C` to stop and quit the app.
+
+
+## When monitored by IBM Instana
+
+IBM Instana offers great support for Python apps without any code changes.
+
+The typical steps might look like:
+1. Install the Instana sensor into your app, which will be automatically handled with webhook when you're with Kubernetes/OpenShift: `pip install git+https://github.com/instana/python-sensor@v2.5.2`.
+2. Export one necessary variable, which can be at global system or process level: `AUTOWRAPT_BOOTSTRAP=instana`.
+3. Optionally, define a friendly service name, which will be discovered and displayed on UI, say `INSTANA_SERVICE_NAME=my-simple-python-app`.
+4. Optionally, enable `INSTANA_DEBUG=true` to output verbose instrumentation / tracing info, which helps when you're trying to learn more.
+
+So the run command may look like this: 
+
+```sh
+$ nohup bash -c "AUTOWRAPT_BOOTSTRAP=instana INSTANA_SERVICE_NAME=my-cool-python-app INSTANA_DEBUG=true python -m flask --app board run --host=0.0.0.0 --port 8080" &> app.out & echo $! > app.pid
+```
