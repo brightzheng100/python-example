@@ -112,3 +112,13 @@ So the run command may look like this:
 ```sh
 $ nohup bash -c "AUTOWRAPT_BOOTSTRAP=instana INSTANA_SERVICE_NAME=my-cool-python-app INSTANA_DEBUG=true python -m flask --app board run --host=0.0.0.0 --port 8080" &> app.out & echo $! > app.pid
 ```
+
+> Note: kill the process by: `kill -9 $(cat app.pid)`
+
+You may generate some traffic as well for fun:
+
+```sh
+$ nohup bash -c "while true; do curl -sS -D – 127.0.0.1:8080; sleep 1; done;" &> load.out & echo $! > load.pid
+```
+
+> Note: kill the process by: `kill -9 $(cat load.pid)`
